@@ -72,7 +72,7 @@ void rplan::rp_mainWindowUI()
 
     /* TabWidget */
     rp_funTabWidget = new QTabWidget;
-    rp_cmdWidget = new rp_cmd();
+    rp_cmdWidget = new rp_cmd_console();
     const QIcon rp_cmdIconTab = QIcon::fromTheme("tab-cmd", QIcon(":/image/cmd.png"));
     rp_funTabWidget->addTab(rp_cmdWidget, rp_cmdIconTab, tr("cmd"));
 

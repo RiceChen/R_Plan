@@ -2,7 +2,7 @@
 #define RPLAN_H
 
 #include <QMainWindow>
-#include "rp_cmd/rp_cmd.h"
+#include "rp_cmd/rp_cmd_console.h"
 #include "rp_rtt_ota_pack/rp_rtt_ota_pack.h"
 
 QT_BEGIN_NAMESPACE
@@ -31,7 +31,7 @@ private:
     QTabWidget *rp_funTabWidget;
 
 private:
-    rp_cmd *rp_cmdWidget;
+    rp_cmd_console *rp_cmdWidget;
     rp_rtt_ota_pack *rp_rttOtaPackWidget;
 
 
