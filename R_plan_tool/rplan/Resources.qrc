@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/copy.png</file>
+        <file>image/cut.png</file>
+        <file>image/new.png</file>
+        <file>image/open.png</file>
+        <file>image/paste.png</file>
+        <file>image/save.png</file>
+        <file>image/help.png</file>
+        <file>image/logo.png</file>
+        <file>image/cmd.png</file>
+        <file>image/pack.png</file>
+        <file>image/rtt_logo.png</file>
+    </qresource>
+</RCC>
