@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     rp_cmd/rp_cmd_console.cpp \
+    rp_find_file/rp_find_file.cpp \
     rp_rtt_ota_pack/rp_rtt_ota_pack.cpp \
     rplan.cpp
 
 HEADERS += \
     rp_cmd/rp_cmd_console.h \
+    rp_find_file/rp_find_file.h \
     rp_rtt_ota_pack/rp_rtt_ota_pack.h \
     rplan.h
 

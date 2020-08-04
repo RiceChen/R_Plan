@@ -10,6 +10,7 @@ class rp_cmd_console : public QPlainTextEdit
 
 public:
     explicit rp_cmd_console(QWidget *parent = nullptr);
+    ~rp_cmd_console();
 
 private:
     void rp_cmdWindowUI();

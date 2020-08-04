@@ -11,6 +11,12 @@ rp_cmd_console::rp_cmd_console(QWidget *parent)
     rp_cmdFuncConfig();
 }
 
+rp_cmd_console::~rp_cmd_console()
+{
+    rp_cmdQprocess->kill();
+}
+
+
 void rp_cmd_console::rp_cmdWindowUI()
 {
     document()->setMaximumBlockCount(100);
@@ -39,7 +45,10 @@ void rp_cmd_console::rp_cmdFuncConfig()
 
     rp_cmdQprocess->start("cmd.exe");
 
-
+    setPlainText("");
+    insertPlainText(QString(tr("\\    |   /\n"
+                               "- R plan - \n"
+                               "/    |   \\  windows cmd console\n")));
 }
 
 
@@ -87,9 +96,7 @@ void rp_cmd_console::rp_putCmdData(QString cmd)
 
 void rp_cmd_console::keyPressEvent(QKeyEvent *e)
 {
-    switch(e->key())
-    {
-    case Qt::Key_Backspace:
+    if(Qt::Key_Backspace == e->key())
     {
         if(rp_cmdSendData.length())
         {
@@ -99,32 +106,24 @@ void rp_cmd_console::keyPressEvent(QKeyEvent *e)
             setPlainText("");
             insertPlainText(rp_cmdConsoleContent);
         }
-        break;
     }
-    case Qt::Key_Enter:
+    else if(Qt::Key_Enter == e->key() || Qt::Key_Return == e->key())
     {
         insertPlainText("\n");
         rp_cmdSendData.append("\r\n");
         rp_cmdQProcessSend(rp_cmdSendData);
         rp_cmdSendData.clear();
-
-        break;
     }
-    case Qt::Key_Return:
+    else if((Qt::ControlModifier & e->modifiers()) != 0 && Qt::Key_C == e->key())
     {
-        insertPlainText("\n");
         rp_cmdSendData.append("\r\n");
         rp_cmdQProcessSend(rp_cmdSendData);
         rp_cmdSendData.clear();
-
-        break;
     }
-    default:
+    else
     {
         QPlainTextEdit::keyPressEvent(e);
         rp_cmdSendData.append(e->text().toLocal8Bit());
-        break;
-    }
     }
 }
 

@@ -80,6 +80,9 @@ void rplan::rp_mainWindowUI()
     const QIcon rp_rttOtaPackIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/pack.png"));
     rp_funTabWidget->addTab(rp_rttOtaPackWidget, rp_rttOtaPackIconTab, tr("rtt ota pack"));
 
+    rp_findFileWidget = new rp_find_file();
+    const QIcon rp_findFileIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/find_file.png"));
+    rp_funTabWidget->addTab(rp_findFileWidget, rp_findFileIconTab, tr("find file"));
 
     setCentralWidget(rp_funTabWidget);
 }

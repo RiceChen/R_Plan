@@ -1,9 +1,19 @@
 #include "rp_rtt_ota_pack.h"
 
+#include <QFileDialog>
+#include <QDebug>
+#include <QProcess>
+#include <QDateTime>
+#include <QMessageBox>
+#include <QCoreApplication>
+#include <QtEndian>
+
 rp_rtt_ota_pack::rp_rtt_ota_pack(QWidget *parent)
     : QWidget(parent)
 {
     rp_rttOtaPackUI();
+
+    rp_rttOtaFuncConfig();
 }
 
 void rp_rtt_ota_pack::rp_rttOtaPackUI()
@@ -27,13 +37,13 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     QFont rp_funcInfoFont("Microsoft YaHei", 15);
 
     // select FW
-    QPushButton *rp_selectFwButton = new QPushButton(tr("选择固件"));
+    rp_selectFwButton = new QPushButton(tr("选择固件"));
     rp_selectFwButton->setFixedSize(160, 50);
     rp_selectFwLineEdit = new QLineEdit();
     rp_selectFwLineEdit->setFont(rp_funcInfoFont);
 
     //svae path
-    QPushButton *rp_savePathButton = new QPushButton(tr("保存路径"));
+    rp_savePathButton = new QPushButton(tr("保存路径"));
     rp_savePathButton->setFixedSize(160, 50);
     rp_savePathLineEdit = new QLineEdit();
     rp_savePathLineEdit->setFont(rp_funcInfoFont);
@@ -161,24 +171,24 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_timestampResultLabel->setStyleSheet(rp_resultInfoColor);
 
     // pack button
-    QPushButton *rp_packButton = new QPushButton(tr("开始打包"));
+    rp_packButton = new QPushButton(tr("开始打包"));
     rp_packButton->setFont(rp_resultInfoFont);
     rp_packButton->setFixedSize(160, 100);
 
     QGridLayout *rp_resultLayout = new QGridLayout;
     rp_resultLayout->addWidget(rp_resultLable, 0, 0, Qt::AlignLeft);
-    rp_resultLayout->addWidget(rp_hashCodeLable, 1, 0, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_hashCodeResultLabel, 1, 1, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_rawSizeLable, 1, 2, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_rawSizeResultLabel, 1, 3, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_hdrCrc32Lable, 2, 0, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_hdrCrc32ResultLabel, 2, 1, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_pkgSizeLable, 2, 2, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_pkgSizeResultLabel, 2, 3, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_bodyCrc32Lable, 3, 0, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_bodyCrc32ResultLabel, 3, 1, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_timestampLable, 3, 2, Qt::AlignHCenter);
-    rp_resultLayout->addWidget(rp_timestampResultLabel, 3, 3, Qt::AlignHCenter);
+    rp_resultLayout->addWidget(rp_hashCodeLable, 1, 0, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_hashCodeResultLabel, 1, 1, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_rawSizeLable, 1, 2, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_rawSizeResultLabel, 1, 3, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_hdrCrc32Lable, 2, 0, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_hdrCrc32ResultLabel, 2, 1, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_pkgSizeLable, 2, 2, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_pkgSizeResultLabel, 2, 3, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_bodyCrc32Lable, 3, 0, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_bodyCrc32ResultLabel, 3, 1, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_timestampLable, 3, 2, Qt::AlignLeft);
+    rp_resultLayout->addWidget(rp_timestampResultLabel, 3, 3, Qt::AlignLeft);
     rp_resultLayout->addWidget(rp_packButton, 1, 4, 3, 1);
     rp_resultLayout->setMargin(20);
 
@@ -188,5 +198,166 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_mainLayout->addLayout(rp_resultLayout, Qt::AlignVCenter);
 
     setLayout(rp_mainLayout);
+}
+
+void rp_rtt_ota_pack::rp_rttOtaFuncConfig()
+{
+    rp_openFileDialog = new QFileDialog();
+    rp_openFileDialog->setWindowTitle("R-Plan select RTT fireware");
+    rp_openFileDialog->setDirectory(".");
+    rp_openFileDialog->setNameFilter(tr("File(*.bin)"));
+    rp_openFileDialog->setViewMode(QFileDialog::Detail);
+
+    rp_selectFwLineEdit->setText(tr("rtthread.bin"));
+    rp_savePathLineEdit->setText(tr("rtthread.rbl"));
+
+    connect(rp_selectFwButton, SIGNAL(clicked()), this, SLOT(rp_selectFwButtonHandle()));
+    connect(rp_savePathButton, SIGNAL(clicked()), this, SLOT(rp_savePathButtonHandle()));
+    connect(rp_packButton, SIGNAL(clicked()), this, SLOT(rp_packButtonHandle()));
+}
+
+void rp_rtt_ota_pack::rp_selectFwButtonHandle()
+{
+    qDebug() << "Into select Fw!" << endl;
+    QString rp_fwFileName;
+    QString rp_saveFileName;
+    if(QDialog::Accepted == rp_openFileDialog->exec())
+    {
+        rp_fwFileName = rp_openFileDialog->selectedFiles()[0];
+        rp_selectFwLineEdit->setText(rp_fwFileName);
+        rp_saveFileName = rp_fwFileName.left(rp_fwFileName.length() - 3) + "rbl";
+        rp_savePathLineEdit->setText(rp_saveFileName);
+        qDebug() << rp_fwFileName << endl;
+    }
+}
+
+void rp_rtt_ota_pack::rp_savePathButtonHandle()
+{
+    qDebug() << "Into save path!" << endl;
+    rp_saveFileDialog = new QFileDialog();
+
+    QString rp_saveFileName = rp_saveFileDialog->getSaveFileName(this,
+                                                          tr("R-Plan save RTT fireware"),
+                                                          tr("rtthread"),
+                                                          tr("*.rbl"));
+    if(!rp_saveFileName.isEmpty())
+    {
+        rp_savePathLineEdit->setText(rp_saveFileName);
+    }
+}
+
+void rp_rtt_ota_pack::rp_packButtonHandle()
+{
+    qDebug() << "Into pack!" << endl;
+    QProcess *rp_rttOtaPackProcess = new QProcess();
+    QString rp_program = QCoreApplication::applicationDirPath() + "/tools/rt_ota_packaging_tool/rt_ota_packaging_tool_cli.exe";
+    QStringList rp_arguments;
+
+    // source file
+    if(!rp_selectFwLineEdit->text().isEmpty())
+    {
+        rp_arguments << "-f" << rp_selectFwLineEdit->text();
+    }
+    else
+    {
+        QMessageBox::about(this, tr("Warning"),
+                           tr("Please select source file!"));
+        return;
+    }
+
+    // version
+    if(!rp_fwVerLineEdit->text().isEmpty())
+    {
+        rp_arguments << "-v" << rp_fwVerLineEdit->text();
+    }
+    else
+    {
+        QDateTime rp_currentTime = QDateTime::currentDateTime();
+        QString rp_currentTimeStr = rp_currentTime.toString("yyyyMMdd_hhmmss");
+
+        rp_arguments << "-v" << rp_currentTimeStr;
+    }
+
+    // partition name
+    if(!rp_fwNameLineEdit->text().isEmpty())
+    {
+        rp_arguments << "-p" << rp_fwNameLineEdit->text();
+    }
+    else
+    {
+        rp_arguments << "-p" << "app";
+    }
+
+    // target file
+    if(!rp_savePathLineEdit->text().isEmpty())
+    {
+        rp_arguments << "-o" << rp_savePathLineEdit->text();
+    }
+    else
+    {
+        QMessageBox::about(this, tr("Warning"),
+                           tr("Please select save path!"));
+        return;
+    }
+
+    // compression algorithm
+    if(rp_comAlgComboBox->currentText() != tr("不压缩"))
+    {
+        rp_arguments << "-c" << rp_comAlgComboBox->currentText();
+    }
+
+    // encryption algorithm
+    if(rp_encAlgComboBox->currentText() != tr("不加密"))
+    {
+        rp_arguments << "-s" << "aes";
+    }
+
+    // encryption IV
+    if(!rp_encIvLineEdit->text().isEmpty())
+    {
+        rp_arguments << "-i" << rp_encIvLineEdit->text();
+    }
+    else
+    {
+        rp_arguments << "-i" << "0123456789ABCDEF";
+    }
+
+    // private key
+    if(!rp_priKeyLineEdit->text().isEmpty())
+    {
+        rp_arguments << "-k" << rp_priKeyLineEdit->text();
+    }
+    else
+    {
+        rp_arguments << "-k" << "0123456789ABCDEF0123456789ABCDEF";
+    }
+
+    // generate rbl
+    qDebug() << rp_program << rp_arguments << endl;
+    rp_rttOtaPackProcess->start(rp_program, rp_arguments);
+
+    QFile rp_rblFile(rp_savePathLineEdit->text());
+    if(!rp_rblFile.exists())
+    {
+        qDebug() << "RBL file does not exist!" << endl;
+        return;
+    }
+    if(!rp_rblFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Unable to open RBL file!" << endl;
+        return;
+    }
+    QByteArray rp_rblFileContent = rp_rblFile.readAll();
+    char *rp_rblHanderChar = rp_rblFileContent.data();
+
+    memcpy(&rp_rblHander, rp_rblHanderChar, sizeof(struct rp_rt_ota_rbl_hdr));
+
+    rp_hashCodeResultLabel->setText(QString::number(qFromLittleEndian(rp_rblHander.hash), 16));
+    rp_rawSizeResultLabel->setText(QString::number(rp_rblHander.size_raw));
+    rp_hdrCrc32ResultLabel->setText(QString::number(qFromLittleEndian(rp_rblHander.info_crc32), 16));
+    rp_pkgSizeResultLabel->setText(QString::number(rp_rblHander.size_package));
+    rp_bodyCrc32ResultLabel->setText(QString::number(qFromLittleEndian(rp_rblHander.crc32), 16));
+    rp_timestampResultLabel->setText(QString::number(rp_rblHander.timestamp));
+    rp_rblFile.close();
 }
 

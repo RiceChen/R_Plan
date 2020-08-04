@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "rp_cmd/rp_cmd_console.h"
 #include "rp_rtt_ota_pack/rp_rtt_ota_pack.h"
+#include "rp_find_file/rp_find_file.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -33,6 +34,7 @@ private:
 private:
     rp_cmd_console *rp_cmdWidget;
     rp_rtt_ota_pack *rp_rttOtaPackWidget;
+    rp_find_file *rp_findFileWidget;
 
 
 };
