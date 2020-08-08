@@ -16,7 +16,6 @@ rp_cmd_console::~rp_cmd_console()
     rp_cmdQprocess->kill();
 }
 
-
 void rp_cmd_console::rp_cmdWindowUI()
 {
     document()->setMaximumBlockCount(100);
@@ -26,8 +25,6 @@ void rp_cmd_console::rp_cmdWindowUI()
 
     setPalette(rp_cmdPalette);
 }
-
-
 
 void rp_cmd_console::rp_cmdFuncConfig()
 {
@@ -44,13 +41,7 @@ void rp_cmd_console::rp_cmdFuncConfig()
     connect(rp_cmdQprocess,SIGNAL(finished(int)),this,SLOT(rp_cmdQProcessRecvFinished()));
 
     rp_cmdQprocess->start("cmd.exe");
-
-    setPlainText("");
-    insertPlainText(QString(tr("\\    |   /\n"
-                               "- R plan - \n"
-                               "/    |   \\  windows cmd console\n")));
 }
-
 
 void rp_cmd_console::rp_cmdQProcessSend(QString cmd)
 {

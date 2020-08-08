@@ -74,7 +74,7 @@ void rplan::rp_mainWindowUI()
     rp_funTabWidget = new QTabWidget;
     rp_cmdWidget = new rp_cmd_console();
     const QIcon rp_cmdIconTab = QIcon::fromTheme("tab-cmd", QIcon(":/image/cmd.png"));
-    rp_funTabWidget->addTab(rp_cmdWidget, rp_cmdIconTab, tr("cmd"));
+    rp_funTabWidget->addTab(rp_cmdWidget, rp_cmdIconTab, tr("cmd console"));
 
     rp_rttOtaPackWidget = new rp_rtt_ota_pack();
     const QIcon rp_rttOtaPackIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/pack.png"));
@@ -101,7 +101,6 @@ void rplan::rp_help()
 {
     QMessageBox::about(this, tr("Help"),
                        tr("R plan tool v1.0.0      "));
-
 
 }
 

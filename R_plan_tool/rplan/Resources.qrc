@@ -7,10 +7,10 @@
         <file>image/paste.png</file>
         <file>image/save.png</file>
         <file>image/help.png</file>
-        <file>image/logo.png</file>
         <file>image/cmd.png</file>
         <file>image/pack.png</file>
         <file>image/rtt_logo.png</file>
         <file>image/find_file.png</file>
+        <file>image/logo.png</file>
     </qresource>
 </RCC>
