@@ -1,0 +1,14 @@
+Makefile
+*.qmake.stash
+*.Release
+*.Debug
+*.o
+*.exe
+moc*.cpp
+moc*.h
+*.cpp
+*.dll
+*.exe.config
+*.exe
+rt_ota_packaging_tool_cli-x64
+rt_ota_packaging_tool_cli-x86

@@ -1,0 +1,8 @@
+*.PcbDocPreview
+*.SchDocPreview
+*.PrjPCB.Zip
+*.PcbDoc.Zip
+*.PcbLib.Zip
+*.LOG
+*.htm
+*.PrjPCBStructure
