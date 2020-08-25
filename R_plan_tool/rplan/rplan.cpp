@@ -64,6 +64,13 @@ void rplan::rp_mainWindowUI()
 
     /* Help */
     QToolBar *rp_helpToolBar = addToolBar(tr("Help"));
+
+    const QIcon rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+    rp_ceShiftAction = new QAction(rp_ceShiftIcon, tr("&ceShift"), this);
+    connect(rp_ceShiftAction, &QAction::triggered, this, &rplan::rp_ceShift);
+    rp_ceShiftAction->setStatusTip(tr("Chinese-English shift"));
+    rp_helpToolBar->addAction(rp_ceShiftAction);
+
     const QIcon rp_helpIcon = QIcon::fromTheme("edit-help", QIcon(":/image/help.png"));
     QAction *rp_helpAction = new QAction(rp_helpIcon, tr("&help"), this);
     connect(rp_helpAction, &QAction::triggered, this, &rplan::rp_help);
@@ -72,17 +79,24 @@ void rplan::rp_mainWindowUI()
 
     /* TabWidget */
     rp_funTabWidget = new QTabWidget;
+
+    //cmd
     rp_cmdWidget = new rp_cmd_console();
     const QIcon rp_cmdIconTab = QIcon::fromTheme("tab-cmd", QIcon(":/image/cmd.png"));
     rp_funTabWidget->addTab(rp_cmdWidget, rp_cmdIconTab, tr("cmd console"));
 
+    // rtt ota pack
     rp_rttOtaPackWidget = new rp_rtt_ota_pack();
     const QIcon rp_rttOtaPackIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/pack.png"));
     rp_funTabWidget->addTab(rp_rttOtaPackWidget, rp_rttOtaPackIconTab, tr("rtt ota pack"));
 
+    // find file
     rp_findFileWidget = new rp_find_file();
     const QIcon rp_findFileIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/find_file.png"));
     rp_funTabWidget->addTab(rp_findFileWidget, rp_findFileIconTab, tr("find file"));
+
+
+    connect(rp_funTabWidget, &QTabWidget::currentChanged, this, &rplan::rp_switchFuncTabWidget);
 
     setCentralWidget(rp_funTabWidget);
 }
@@ -92,9 +106,94 @@ void rplan::rp_createStatusBar()
     statusBar()->showMessage(tr("Ready"));
 }
 
-
 rplan::~rplan()
 {
+}
+
+void rplan::rp_switchFuncTabWidget()
+{
+    int rp_funcTabIndex = rp_funTabWidget->currentIndex();
+    QIcon rp_ceShiftIcon;
+    switch(rp_funcTabIndex)
+    {
+    case rp_cmdTab:
+    {
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+
+        break;
+    }
+    case rp_rttOtaPackTab:
+    {
+        if(rp_rttOtaPackWidget->rp_rttOtaPackGetlanguageType())
+        {
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+        }
+        else
+        {
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+        }
+        break;
+    }
+    case rp_findFileTab:
+    {
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    }
+}
+
+void rplan::rp_ceShift()
+{
+    int rp_funcTabIndex = rp_funTabWidget->currentIndex();
+    QIcon rp_ceShiftIcon;
+
+    qDebug() << rp_funcTabIndex;
+    switch(rp_funcTabIndex)
+    {
+    case rp_cmdTab:
+    {
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+
+        break;
+    }
+    case rp_rttOtaPackTab:
+    { 
+        if(rp_rttOtaPackWidget->rp_rttOtaPackGetlanguageType())
+        {
+            qDebug() << "rp_ceShift: rp_rttOtaPackTab";
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+            rp_rttOtaPackWidget->rp_rttOtaPackSetlanguageType(FALSE);
+        }
+        else
+        {
+            qDebug() << "rp_ceShift: rp_rttOtaPackTab";
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+            rp_rttOtaPackWidget->rp_rttOtaPackSetlanguageType(TRUE);
+        }
+        break;
+    }
+    case rp_findFileTab:
+    {
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    }
 }
 
 void rplan::rp_help()

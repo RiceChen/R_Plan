@@ -53,18 +53,31 @@ private:
     void rp_rttOtaPackUI();
     void rp_rttOtaFuncConfig();
 
+public:
+    bool rp_rttOtaPackGetlanguageType();     // //TRUE = chinese, FALSE = english
+    void rp_rttOtaPackSetlanguageType(bool type);
+
 private:
+    QLabel *rp_rttOtaNameLable;
     QPushButton *rp_selectFwButton;
     QLineEdit *rp_selectFwLineEdit;
     QPushButton *rp_savePathButton;
     QLineEdit *rp_savePathLineEdit;
+
+    QLabel *rp_comAlgLable;
     QComboBox *rp_comAlgComboBox;
+    QLabel *rp_encAlgLable;
     QComboBox *rp_encAlgComboBox;
+    QLabel *rp_priKeyLable;
     QLineEdit *rp_priKeyLineEdit;
+    QLabel *rp_encIvLable;
     QLineEdit *rp_encIvLineEdit;
+    QLabel *rp_fwNameLable;
     QLineEdit *rp_fwNameLineEdit;
+    QLabel *rp_fwVerLable;
     QLineEdit *rp_fwVerLineEdit;
 
+    QLabel *rp_resultLable;
     QLabel *rp_hashCodeResultLabel;
     QLabel *rp_rawSizeResultLabel;
     QLabel *rp_hdrCrc32ResultLabel;
@@ -76,6 +89,8 @@ private:
 
     QFileDialog *rp_openFileDialog;
     QFileDialog *rp_saveFileDialog;
+
+    bool rp_rttOtaPacklanguageType;
 
 private:
     struct rp_rt_ota_rbl_hdr rp_rblHander;

@@ -29,7 +29,7 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_rttlogoPixmap.scaled(rp_rttLogoWidth, rp_rttLogoHight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     rp_rttLogoLabel->setPixmap(rp_rttlogoPixmap);
 
-    QLabel *rp_rttOtaNameLable = new QLabel(tr("   RT-Thread OTA 固件打包工具"));
+    rp_rttOtaNameLable = new QLabel(tr("RT-Thread OTA 固件打包工具"));
     QFont rp_rttOtaNameFont("Microsoft YaHei", 20, 75);
     rp_rttOtaNameLable->setFont(rp_rttOtaNameFont);
 
@@ -49,45 +49,45 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_savePathLineEdit->setFont(rp_funcInfoFont);
 
     // compression algorithm
-    QLabel *rp_comAlgLable = new QLabel(tr("压缩算法"));
+    rp_comAlgLable = new QLabel(tr("压缩算法"));
     rp_comAlgLable->setFont(rp_funcInfoFont);
     rp_comAlgComboBox = new QComboBox();
     rp_comAlgComboBox->setFont(rp_funcInfoFont);
     QStringList rp_comAlgStrList;
-    rp_comAlgStrList << "不压缩" << "quicklz" << "fastlz" << "gzip";
+    rp_comAlgStrList << tr("不压缩") << tr("quicklz") << tr("fastlz") << tr("gzip");
     rp_comAlgComboBox->addItems(rp_comAlgStrList);
     rp_comAlgComboBox->setCurrentIndex(3);
 
     //encryption algorithm
-    QLabel *rp_encAlgLable = new QLabel(tr("加密算法"));
+    rp_encAlgLable = new QLabel(tr("加密算法"));
     rp_encAlgLable->setFont(rp_funcInfoFont);
     rp_encAlgComboBox = new QComboBox();
     rp_encAlgComboBox->setFont(rp_funcInfoFont);
     QStringList rp_encAlgStrList;
-    rp_encAlgStrList << "不加密" << "AES256";
+    rp_encAlgStrList << tr("不加密") << tr("AES256");
     rp_encAlgComboBox->addItems(rp_encAlgStrList);
     rp_encAlgComboBox->setCurrentIndex(1);
 
     //private key
-    QLabel *rp_priKeyLable = new QLabel(tr("加密秘钥"));
+    rp_priKeyLable = new QLabel(tr("加密秘钥"));
     rp_priKeyLable->setFont(rp_funcInfoFont);
     rp_priKeyLineEdit = new QLineEdit(tr("0123456789ABCDEF0123456789ABCDEF"));
     rp_priKeyLineEdit->setFont(rp_funcInfoFont);
 
     //encryption IV
-    QLabel *rp_encIvLable = new QLabel(tr("加密 IV"));
+    rp_encIvLable = new QLabel(tr("加密 IV"));
     rp_encIvLable->setFont(rp_funcInfoFont);
     rp_encIvLineEdit = new QLineEdit(tr("0123456789ABCDEF"));
     rp_encIvLineEdit->setFont(rp_funcInfoFont);
 
     //FW name
-    QLabel *rp_fwNameLable = new QLabel(tr("固件名称"));
+    rp_fwNameLable = new QLabel(tr("固件名称"));
     rp_fwNameLable->setFont(rp_funcInfoFont);
     rp_fwNameLineEdit = new QLineEdit(tr("app"));
     rp_fwNameLineEdit->setFont(rp_funcInfoFont);
 
     // FW version
-    QLabel *rp_fwVerLable = new QLabel(tr("固件版本"));
+    rp_fwVerLable = new QLabel(tr("固件版本"));
     rp_fwVerLable->setFont(rp_funcInfoFont);
     rp_fwVerLineEdit = new QLineEdit(tr("2.5"));
     rp_fwVerLineEdit->setFont(rp_funcInfoFont);
@@ -115,7 +115,7 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     /* result */
 
     QString rp_resultInfoColor = "color:Red";
-    QLabel *rp_resultLable = new QLabel(tr("结果:"));
+    rp_resultLable = new QLabel(tr("结果:"));
     QFont rp_resultFont("Microsoft YaHei", 15);
     rp_resultLable->setFont(rp_resultFont);
     rp_resultLable->setStyleSheet(rp_resultInfoColor);
@@ -214,6 +214,8 @@ void rp_rtt_ota_pack::rp_rttOtaFuncConfig()
     connect(rp_selectFwButton, SIGNAL(clicked()), this, SLOT(rp_selectFwButtonHandle()));
     connect(rp_savePathButton, SIGNAL(clicked()), this, SLOT(rp_savePathButtonHandle()));
     connect(rp_packButton, SIGNAL(clicked()), this, SLOT(rp_packButtonHandle()));
+
+    rp_rttOtaPacklanguageType = true;
 }
 
 void rp_rtt_ota_pack::rp_selectFwButtonHandle()
@@ -301,13 +303,13 @@ void rp_rtt_ota_pack::rp_packButtonHandle()
     }
 
     // compression algorithm
-    if(rp_comAlgComboBox->currentText() != tr("不压缩"))
+    if(rp_comAlgComboBox->currentText() != tr("不压缩") || rp_comAlgComboBox->currentText() != tr("no cmp"))
     {
         rp_arguments << "-c" << rp_comAlgComboBox->currentText();
     }
 
     // encryption algorithm
-    if(rp_encAlgComboBox->currentText() != tr("不加密"))
+    if(rp_encAlgComboBox->currentText() != tr("不加密") || rp_encAlgComboBox->currentText() != tr("no enc"))
     {
         rp_arguments << "-s" << "aes";
     }
@@ -361,3 +363,63 @@ void rp_rtt_ota_pack::rp_packButtonHandle()
     rp_rblFile.close();
 }
 
+
+bool rp_rtt_ota_pack::rp_rttOtaPackGetlanguageType()
+{
+    return rp_rttOtaPacklanguageType;
+}
+
+void rp_rtt_ota_pack::rp_rttOtaPackSetlanguageType(bool type)
+{
+    QStringList rp_comAlgStrList;
+    QStringList rp_encAlgStrList;
+
+    rp_rttOtaPacklanguageType = type;
+
+    if(rp_rttOtaPacklanguageType)
+    {
+        rp_rttOtaNameLable->setText(tr("RT-Thread OTA 固件打包工具"));
+        rp_selectFwButton->setText(tr("选择固件"));
+        rp_savePathButton->setText(tr("保存路径"));
+        rp_comAlgLable->setText(tr("压缩算法"));
+        rp_encAlgLable->setText(tr("加密算法"));
+        rp_priKeyLable->setText(tr("加密秘钥"));
+        rp_encIvLable->setText(tr("加密 IV"));
+        rp_fwNameLable->setText(tr("固件名称"));
+        rp_fwVerLable->setText(tr("固件版本"));
+        rp_resultLable->setText(tr("结果:"));
+        rp_packButton->setText(tr("开始打包"));
+
+        rp_comAlgComboBox->clear();
+        rp_comAlgStrList << tr("不压缩") << tr("quicklz") << tr("fastlz") << tr("gzip");
+        rp_comAlgComboBox->addItems(rp_comAlgStrList);
+        rp_comAlgComboBox->setCurrentIndex(3);
+        rp_encAlgComboBox->clear();
+        rp_encAlgStrList << tr("不加密") << tr("AES256");
+        rp_encAlgComboBox->addItems(rp_encAlgStrList);
+        rp_encAlgComboBox->setCurrentIndex(1);
+    }
+    else
+    {
+        rp_rttOtaNameLable->setText(tr("RT-Thread OTA FW PACKET TOOL"));
+        rp_selectFwButton->setText(tr("Select FW"));
+        rp_savePathButton->setText(tr("Save path"));
+        rp_comAlgLable->setText(tr("CMP algor"));
+        rp_encAlgLable->setText(tr("ENC algor"));
+        rp_priKeyLable->setText(tr("ENC KEY"));
+        rp_encIvLable->setText(tr("ENC IV"));
+        rp_fwNameLable->setText(tr("FW name"));
+        rp_fwVerLable->setText(tr("FW version"));
+        rp_resultLable->setText(tr("Result:"));
+        rp_packButton->setText(tr("Start"));
+
+        rp_comAlgComboBox->clear();
+        rp_comAlgStrList << tr("no cmp") << tr("quicklz") << tr("fastlz") << tr("gzip");
+        rp_comAlgComboBox->addItems(rp_comAlgStrList);
+        rp_comAlgComboBox->setCurrentIndex(3);
+        rp_encAlgComboBox->clear();
+        rp_encAlgStrList << tr("no enc") << tr("AES256");
+        rp_encAlgComboBox->addItems(rp_encAlgStrList);
+        rp_encAlgComboBox->setCurrentIndex(1);
+    }
+}

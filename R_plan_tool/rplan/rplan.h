@@ -13,6 +13,13 @@ class QTabWidget;
 class QSessionManager;
 QT_END_NAMESPACE
 
+enum rp_funTabWidgetIndex
+{
+    rp_cmdTab,
+    rp_rttOtaPackTab,
+    rp_findFileTab,
+};
+
 class rplan : public QMainWindow
 {
     Q_OBJECT
@@ -22,7 +29,9 @@ public:
     ~rplan();
 
 private slots:
+    void rp_ceShift();
     void rp_help();
+    void rp_switchFuncTabWidget();
 
 private:
     void rp_mainWindowUI();
@@ -31,11 +40,11 @@ private:
 private:
     QTabWidget *rp_funTabWidget;
 
+    QAction *rp_ceShiftAction;
+
 private:
     rp_cmd_console *rp_cmdWidget;
     rp_rtt_ota_pack *rp_rttOtaPackWidget;
     rp_find_file *rp_findFileWidget;
-
-
 };
 #endif // RPLAN_H
