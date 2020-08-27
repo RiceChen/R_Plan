@@ -18,25 +18,34 @@ rp_find_file::~rp_find_file()
 
 void rp_find_file::rp_findFileWindowUI()
 {
+    QLabel *rp_fileNameLabel = new QLabel(tr("Find File name:"));
+    rp_fileNameLabel->setStyleSheet("color:white");
     rp_fileNameComboBox = rp_createComboBox(tr("*"));
+    QLabel *rp_findContentLabel = new QLabel(tr("Find content:"));
+    rp_findContentLabel->setStyleSheet("color:white");
     rp_findContentComboBox = rp_createComboBox();
+    QLabel *rp_directoryLabel = new QLabel(tr("Directory:"));
+    rp_directoryLabel->setStyleSheet("color:white");
     rp_directoryComboBox = rp_createComboBox(QDir::toNativeSeparators(QDir::currentPath()));
 
     rp_browsePushButton = new QPushButton(tr("Browse"));
+    rp_browsePushButton->setStyleSheet("background:rgb(80, 80, 80);color:white");
 
     rp_filesFoundLabel = new QLabel;
     rp_filesFoundLabel->setText(tr("%n file(s) found (Double click on a file to open it)", 0, 0));
+    rp_filesFoundLabel->setStyleSheet("color:white");
 
     rp_createFilesTable();
 
     rp_findPushButton = new QPushButton(tr("Find"));
+    rp_findPushButton->setStyleSheet("background:rgb(80, 80, 80);color:white");
 
     QGridLayout *rp_mainLayout = new QGridLayout(this);
-    rp_mainLayout->addWidget(new QLabel(tr("Find File name:")), 0, 0);
+    rp_mainLayout->addWidget(rp_fileNameLabel, 0, 0);
     rp_mainLayout->addWidget(rp_fileNameComboBox, 0, 1, 1, 2);
-    rp_mainLayout->addWidget(new QLabel(tr("Find content:")), 1, 0);
+    rp_mainLayout->addWidget(rp_findContentLabel, 1, 0);
     rp_mainLayout->addWidget(rp_findContentComboBox, 1, 1, 1, 2);
-    rp_mainLayout->addWidget(new QLabel(tr("Directory:")), 2, 0);
+    rp_mainLayout->addWidget(rp_directoryLabel, 2, 0);
     rp_mainLayout->addWidget(rp_directoryComboBox, 2, 1);
     rp_mainLayout->addWidget(rp_browsePushButton, 2, 2);
 

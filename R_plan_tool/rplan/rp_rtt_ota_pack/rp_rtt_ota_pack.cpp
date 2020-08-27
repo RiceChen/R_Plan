@@ -32,6 +32,7 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_rttOtaNameLable = new QLabel(tr("RT-Thread OTA 固件打包工具"));
     QFont rp_rttOtaNameFont("Microsoft YaHei", 20, 75);
     rp_rttOtaNameLable->setFont(rp_rttOtaNameFont);
+    rp_rttOtaNameLable->setStyleSheet("color:white");
 
     /* func */
     QFont rp_funcInfoFont("Microsoft YaHei", 15);
@@ -41,16 +42,19 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_selectFwButton->setFixedSize(160, 50);
     rp_selectFwLineEdit = new QLineEdit();
     rp_selectFwLineEdit->setFont(rp_funcInfoFont);
+    rp_selectFwButton->setStyleSheet("background:rgb(80, 80, 80);color:white");
 
     //svae path
     rp_savePathButton = new QPushButton(tr("保存路径"));
     rp_savePathButton->setFixedSize(160, 50);
     rp_savePathLineEdit = new QLineEdit();
     rp_savePathLineEdit->setFont(rp_funcInfoFont);
+    rp_savePathButton->setStyleSheet("background:rgb(80, 80, 80);color:white");
 
     // compression algorithm
     rp_comAlgLable = new QLabel(tr("压缩算法"));
     rp_comAlgLable->setFont(rp_funcInfoFont);
+    rp_comAlgLable->setStyleSheet("color:white");
     rp_comAlgComboBox = new QComboBox();
     rp_comAlgComboBox->setFont(rp_funcInfoFont);
     QStringList rp_comAlgStrList;
@@ -58,9 +62,11 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_comAlgComboBox->addItems(rp_comAlgStrList);
     rp_comAlgComboBox->setCurrentIndex(3);
 
+
     //encryption algorithm
     rp_encAlgLable = new QLabel(tr("加密算法"));
     rp_encAlgLable->setFont(rp_funcInfoFont);
+    rp_encAlgLable->setStyleSheet("color:white");
     rp_encAlgComboBox = new QComboBox();
     rp_encAlgComboBox->setFont(rp_funcInfoFont);
     QStringList rp_encAlgStrList;
@@ -71,30 +77,34 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     //private key
     rp_priKeyLable = new QLabel(tr("加密秘钥"));
     rp_priKeyLable->setFont(rp_funcInfoFont);
+    rp_priKeyLable->setStyleSheet("color:white");
     rp_priKeyLineEdit = new QLineEdit(tr("0123456789ABCDEF0123456789ABCDEF"));
     rp_priKeyLineEdit->setFont(rp_funcInfoFont);
 
     //encryption IV
     rp_encIvLable = new QLabel(tr("加密 IV"));
     rp_encIvLable->setFont(rp_funcInfoFont);
+    rp_encIvLable->setStyleSheet("color:white");
     rp_encIvLineEdit = new QLineEdit(tr("0123456789ABCDEF"));
     rp_encIvLineEdit->setFont(rp_funcInfoFont);
 
     //FW name
     rp_fwNameLable = new QLabel(tr("固件名称"));
     rp_fwNameLable->setFont(rp_funcInfoFont);
+    rp_fwNameLable->setStyleSheet("color:white");
     rp_fwNameLineEdit = new QLineEdit(tr("app"));
     rp_fwNameLineEdit->setFont(rp_funcInfoFont);
 
     // FW version
     rp_fwVerLable = new QLabel(tr("固件版本"));
     rp_fwVerLable->setFont(rp_funcInfoFont);
+    rp_fwVerLable->setStyleSheet("color:white");
     rp_fwVerLineEdit = new QLineEdit(tr("2.5"));
     rp_fwVerLineEdit->setFont(rp_funcInfoFont);
 
     QGridLayout *rp_funcLayout = new QGridLayout;
     rp_funcLayout->addWidget(rp_rttLogoLabel, 0, 0, Qt::AlignHCenter);
-    rp_funcLayout->addWidget(rp_rttOtaNameLable, 0, 1, 1, 3);
+    rp_funcLayout->addWidget(rp_rttOtaNameLable, 0, 1, 1, 3, Qt::AlignHCenter);
     rp_funcLayout->addWidget(rp_selectFwButton, 1, 0, Qt::AlignHCenter);
     rp_funcLayout->addWidget(rp_selectFwLineEdit, 1, 1, 1, 3);
     rp_funcLayout->addWidget(rp_savePathButton, 2, 0, Qt::AlignHCenter);
@@ -174,6 +184,7 @@ void rp_rtt_ota_pack::rp_rttOtaPackUI()
     rp_packButton = new QPushButton(tr("开始打包"));
     rp_packButton->setFont(rp_resultInfoFont);
     rp_packButton->setFixedSize(160, 100);
+    rp_packButton->setStyleSheet("background:rgb(80, 80, 80);color:white");
 
     QGridLayout *rp_resultLayout = new QGridLayout;
     rp_resultLayout->addWidget(rp_resultLable, 0, 0, Qt::AlignLeft);

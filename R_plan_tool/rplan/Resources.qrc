@@ -14,5 +14,6 @@
         <file>image/logo.png</file>
         <file>image/ch.png</file>
         <file>image/en.png</file>
+        <file>image/net_aid.png</file>
     </qresource>
 </RCC>
