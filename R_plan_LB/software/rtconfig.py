@@ -58,3 +58,34 @@ if PLATFORM == 'gcc':
 
 DUMP_ACTION = OBJDUMP + ' -D -S $TARGET > rtt.asm\n'
 POST_ACTION = OBJCPY + ' -O binary $TARGET rtthread.bin\n' + SIZE + ' $TARGET \n'
+
+# rt_ota_packaging_tool
+# ..\tools\rt_ota_packaging_tool\rt_ota_packaging_tool_cli.exe  -f rtthread.bin -v 1957 -p app -o rtthread.rbl -c gzip -s aes -i 0123456789ABCDEF -k 0123456789ABCDEF0123456789ABCDEF
+import platform
+
+# platform.system() ==> Windows Linux 
+# platform.architecture() ==> ('64bit', 'ELF') ('64bit', 'WindowsPE')
+
+sys = platform.system()
+if sys == 'Windows':
+    RBL_CMD = 'rt_ota_packaging_tool_cli.exe'
+else:
+    bit, exe = platform.architecture()
+    if bit == '64bit':
+        RBL_CMD = 'rt_ota_packaging_tool_cli-x64'
+    else:
+        RBL_CMD = 'rt_ota_packaging_tool_cli-x86'
+
+RBL_CMD += ' -f rtthread.bin'
+
+import datetime
+version = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') # 20191219_124927
+RBL_CMD += ' -v ' + version
+
+RBL_CMD += ' -p app'
+RBL_CMD += ' -o rtthread.rbl'
+RBL_CMD += ' -c gzip'
+
+RBL_CMD += ' -s aes -i ' + '0123456789ABCDEF' + ' -k ' + '0123456789ABCDEF0123456789ABCDEF'
+
+POST_ACTION += 'tool/rt_ota_packaging_tool/' + RBL_CMD
