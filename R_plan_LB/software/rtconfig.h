@@ -368,6 +368,7 @@
 #define PKG_USING_LITTLEFS
 #define RT_USING_MTD_NOR
 
+#define RT_USING_CPLUSPLUS
 
 #define RP_USING_LCD
 

@@ -30,7 +30,7 @@
 /* Split memory into area for vectors and ram */
 MEMORY
 {
-        flash  (rx) : ORIGIN = 0x00010000, LENGTH = 1215k /* 1216KB - 96B */
+        flash  (rx) : ORIGIN = 0x00010000, LENGTH = 1700k /* 1216KB - 96B */
         ram   (rw!x): ORIGIN = 0x00400020, LENGTH = 262112
 }
 
