@@ -23,7 +23,6 @@ source "$PKGS_DIR/KConfig"
 
 source "$BSP_DIR/drivers/Kconfig"
 source "$BSP_DIR/samples/Kconfig"
-source "$BSP_DIR/test/Kconfig"
 
 config PKG_USING_RT_OTA
     bool

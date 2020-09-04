@@ -4,8 +4,6 @@
 #include <rtdevice.h>
 #include <board.h>
 
-rt_uint16_t BACK_COLOR = WHITE, FORE_COLOR = BLACK;
-
 static struct rt_spi_device *spi_dev_lcd;
 
 static int rt_hw_lcd_config(void)
@@ -51,7 +49,7 @@ rt_err_t lcd_write_half_word(const rt_uint16_t da)
 }
 
 void lcd_address_set(rt_uint16_t x_start, rt_uint16_t y_start, 
-                    rt_uint16_t x_end, rt_uint16_t y_end)
+                     rt_uint16_t x_end, rt_uint16_t y_end)
 {
     lcd_write_cmd(0x2a);
     lcd_write_data(x_start >> 8);

@@ -367,4 +367,8 @@
 //#define PKG_USING_QRCODE
 #define PKG_USING_LITTLEFS
 #define RT_USING_MTD_NOR
+
+
+#define RP_USING_LCD
+
 #endif
