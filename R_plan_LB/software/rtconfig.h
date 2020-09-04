@@ -371,5 +371,6 @@
 #define RT_USING_CPLUSPLUS
 
 #define RP_USING_LCD
+#define RP_USING_SHT3X
 
 #endif

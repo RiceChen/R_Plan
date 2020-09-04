@@ -14,7 +14,7 @@ struct EXTERNAL_GFX_OP
 } my_gfx_op;
 extern void startHelloStar(void* phy_fb, int width, int height, int color_bytes, struct EXTERNAL_GFX_OP* gfx_op);
 
-static char guilite_stack[512];
+static char guilite_stack[1024];
 static struct rt_thread thread_guilite;
 
 static void thread_guilite_entry(void *param)
@@ -37,4 +37,4 @@ static int guilite_demo(void)
 								);
 	rt_thread_startup(&thread_guilite);
 }
-INIT_APP_EXPORT(guilite_demo);
+// INIT_APP_EXPORT(guilite_demo);

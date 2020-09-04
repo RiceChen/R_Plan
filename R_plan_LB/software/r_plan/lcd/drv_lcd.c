@@ -228,4 +228,4 @@ static int rt_hw_lcd_init(void)
 	rt_lcd_init();
 	return 0;
 }
-INIT_APP_EXPORT(rt_hw_lcd_init);
+INIT_COMPONENT_EXPORT(rt_hw_lcd_init);
