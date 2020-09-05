@@ -368,9 +368,10 @@
 #define PKG_USING_LITTLEFS
 #define RT_USING_MTD_NOR
 
-#define RT_USING_CPLUSPLUS
+//#define RT_USING_CPLUSPLUS
 
 #define RP_USING_LCD
 #define RP_USING_SHT3X
+#define RP_USING_CAMERA
 
 #endif

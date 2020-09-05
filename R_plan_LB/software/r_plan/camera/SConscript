@@ -1,0 +1,10 @@
+# RT-Thread building script for component
+
+from building import *
+
+cwd     = GetCurrentDir()
+src     = Glob('*.c')
+CPPPATH = [cwd]
+group   = DefineGroup('rp_lcd', src, depend = ['RP_USING_CAMERA'], CPPPATH = CPPPATH)
+
+Return('group')

@@ -25,20 +25,20 @@ static int rt_hw_lcd_config(void)
     return RT_EOK;
 }
 
-static void lcd_write_cmd(const rt_uint8_t cmd)
+static void lcd_write_cmd(rt_uint8_t cmd)
 {
     rt_pin_write(LCD_DCx_PIN, PIN_LOW);
     rt_spi_send(spi_dev_lcd, &cmd, 1);
 }
 
-static void lcd_write_data(const rt_uint8_t data)
+static void lcd_write_data(rt_uint8_t data)
 {
     rt_pin_write(LCD_DCx_PIN, PIN_HIGH);
 
     rt_spi_send(spi_dev_lcd, &data, 1);
 }
 
-rt_err_t lcd_write_half_word(const rt_uint16_t da)
+rt_err_t lcd_write_half_word(rt_uint16_t da)
 {
     char data[2] = {0};
     data[0] = da >> 8;

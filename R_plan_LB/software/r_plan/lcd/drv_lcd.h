@@ -37,5 +37,6 @@ void lcd_clear(rt_uint16_t color);
 void lcd_draw_point(rt_uint16_t x, rt_uint16_t y, rt_uint16_t color);
 rt_err_t lcd_show_image(rt_uint16_t x, rt_uint16_t y, rt_uint16_t length, rt_uint16_t wide, const rt_uint8_t *p);
 rt_err_t lcd_open_window(rt_uint16_t x, rt_uint16_t y, rt_uint16_t length, rt_uint16_t wide);
+rt_err_t lcd_write_half_word(rt_uint16_t da);
 
 #endif
