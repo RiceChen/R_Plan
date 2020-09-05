@@ -16,10 +16,10 @@ QT_END_NAMESPACE
 
 enum rp_funTabWidgetIndex
 {
-    rp_cmdTab,
+    rp_netAidTab,
     rp_rttOtaPackTab,
     rp_findFileTab,
-    rp_netAidTab,
+    rp_cmdTab,
 };
 
 class rplan : public QMainWindow

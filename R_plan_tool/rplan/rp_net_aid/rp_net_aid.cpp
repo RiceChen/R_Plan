@@ -194,7 +194,7 @@ void rp_net_aid::rp_netAidUI()
 
 void rp_net_aid::rp_netAidFuncConfig()
 {
-
+    rp_netAidLanguageType = true;
 }
 
 

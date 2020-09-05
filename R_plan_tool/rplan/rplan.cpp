@@ -65,7 +65,7 @@ void rplan::rp_mainWindowUI()
     /* Help */
     QToolBar *rp_helpToolBar = addToolBar(tr("Help"));
 
-    const QIcon rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+    const QIcon rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
     rp_ceShiftAction = new QAction(rp_ceShiftIcon, tr("&ceShift"), this);
     connect(rp_ceShiftAction, &QAction::triggered, this, &rplan::rp_ceShift);
     rp_ceShiftAction->setStatusTip(tr("Chinese-English shift"));
@@ -86,10 +86,11 @@ void rplan::rp_mainWindowUI()
                                    QTabBar::tab:hover{background:rgb(255, 255, 255, 100);color:black;}\
                                    QTabBar::tab:selected{border:1px solid rgb(100, 100, 100); background-color:rgb(50, 50, 50);color:rgb(255, 255, 255)}");
 
-    //cmd
-    rp_cmdWidget = new rp_cmd_console();
-    const QIcon rp_cmdIconTab = QIcon::fromTheme("tab-cmd", QIcon(":/image/cmd.png"));
-    rp_funTabWidget->addTab(rp_cmdWidget, rp_cmdIconTab, tr("cmd console"));
+
+   // NetAid
+   rp_netAidWidget = new rp_net_aid();
+   const QIcon rp_netAidIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/net_aid.png"));
+   rp_funTabWidget->addTab(rp_netAidWidget, rp_netAidIconTab, tr("NetAid"));
 
     // rtt ota pack
     rp_rttOtaPackWidget = new rp_rtt_ota_pack();
@@ -101,10 +102,10 @@ void rplan::rp_mainWindowUI()
     const QIcon rp_findFileIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/find_file.png"));
     rp_funTabWidget->addTab(rp_findFileWidget, rp_findFileIconTab, tr("find file"));
 
-    // NetAid
-    rp_netAidWidget = new rp_net_aid();
-    const QIcon rp_netAidIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/net_aid.png"));
-    rp_funTabWidget->addTab(rp_netAidWidget, rp_netAidIconTab, tr("NetAid"));
+    //cmd
+    rp_cmdWidget = new rp_cmd_console();
+    const QIcon rp_cmdIconTab = QIcon::fromTheme("tab-cmd", QIcon(":/image/cmd.png"));
+    rp_funTabWidget->addTab(rp_cmdWidget, rp_cmdIconTab, tr("cmd console"));
 
     connect(rp_funTabWidget, &QTabWidget::currentChanged, this, &rplan::rp_switchFuncTabWidget);
 
@@ -131,11 +132,18 @@ void rplan::rp_switchFuncTabWidget()
     QIcon rp_ceShiftIcon;
     switch(rp_funcTabIndex)
     {
-    case rp_cmdTab:
+    case rp_netAidTab:
     {
-        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
-        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
-
+        if(rp_netAidWidget->rp_netAidGetLanguageType())
+        {
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+        }
+        else
+        {
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+        }
         break;
     }
     case rp_rttOtaPackTab:
@@ -158,18 +166,11 @@ void rplan::rp_switchFuncTabWidget()
         rp_ceShiftAction->setIcon(rp_ceShiftIcon);
         break;
     }
-    case rp_netAidTab:
+    case rp_cmdTab:
     {
-        if(rp_netAidWidget->rp_netAidGetLanguageType())
-        {
-            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
-            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
-        }
-        else
-        {
-            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
-            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
-        }
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+
         break;
     }
     default:
@@ -187,11 +188,20 @@ void rplan::rp_ceShift()
     qDebug() << rp_funcTabIndex;
     switch(rp_funcTabIndex)
     {
-    case rp_cmdTab:
+    case rp_netAidTab:
     {
-        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
-        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
-
+        if(rp_netAidWidget->rp_netAidGetLanguageType())
+        {
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+            rp_netAidWidget->rp_netAidLSetLanguageType(FALSE);
+        }
+        else
+        {
+            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
+            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+            rp_netAidWidget->rp_netAidLSetLanguageType(TRUE);
+        }
         break;
     }
     case rp_rttOtaPackTab:
@@ -216,22 +226,14 @@ void rplan::rp_ceShift()
         rp_ceShiftAction->setIcon(rp_ceShiftIcon);
         break;
     }
-    case rp_netAidTab:
+    case rp_cmdTab:
     {
-        if(rp_netAidWidget->rp_netAidGetLanguageType())
-        {
-            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
-            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
-            rp_netAidWidget->rp_netAidLSetLanguageType(FALSE);
-        }
-        else
-        {
-            rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
-            rp_ceShiftAction->setIcon(rp_ceShiftIcon);
-            rp_netAidWidget->rp_netAidLSetLanguageType(TRUE);
-        }
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
+
         break;
     }
+
     default:
     {
         break;
