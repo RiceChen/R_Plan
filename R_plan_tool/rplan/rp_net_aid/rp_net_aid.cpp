@@ -56,10 +56,16 @@ void rp_net_aid::rp_netAidUI()
     rp_netRecvSetGroupBox->setStyleSheet("color:white");
     QGridLayout *rp_netRecvSetLayout = new QGridLayout;
 
+    rp_recvTypeButtonGroup = new QButtonGroup(this);
     rp_recvTypeAsciiRadioButton = new QRadioButton(tr("ASCII"));
     rp_recvTypeAsciiRadioButton->setStyleSheet("color:white");
     rp_recvTypeHexRadioButton = new QRadioButton(tr("HEX"));
     rp_recvTypeHexRadioButton->setStyleSheet("color:white");
+    rp_recvTypeButtonGroup->addButton(rp_recvTypeAsciiRadioButton, rp_asciiType);
+    rp_recvTypeButtonGroup->addButton(rp_recvTypeHexRadioButton, rp_hexType);
+    rp_recvTypeAsciiRadioButton->setChecked(true);
+
+
     rp_recvLogModeCheckBox = new QCheckBox(tr("日志模式显示"));
     rp_recvLogModeCheckBox->setStyleSheet("color:white");
     rp_recvLineWrapCheckBox = new QCheckBox(tr("接收区自动换行"));
@@ -87,10 +93,15 @@ void rp_net_aid::rp_netAidUI()
     rp_netSendSetGroupBox->setStyleSheet("color:white");
     QGridLayout *rp_netSendSetLayout = new QGridLayout;
 
+    rp_sendTypeButtonGroup = new QButtonGroup(this);
     rp_sendTypeAsciiRadioButton = new QRadioButton(tr("ASCII"));
     rp_sendTypeAsciiRadioButton->setStyleSheet("color:white");
     rp_sendTypeHexRadioButton = new QRadioButton(tr("HEX"));
     rp_sendTypeHexRadioButton->setStyleSheet("color:white");
+    rp_sendTypeButtonGroup->addButton(rp_sendTypeAsciiRadioButton, rp_asciiType);
+    rp_sendTypeButtonGroup->addButton(rp_sendTypeHexRadioButton, rp_hexType);
+    rp_sendTypeAsciiRadioButton->setChecked(true);
+
     rp_sendPECCheckBox = new QCheckBox(tr("解析转义符"));
     rp_sendPECCheckBox->setStyleSheet("color:white");
     rp_sendLineWrapCheckBox = new QCheckBox(tr("发送区自动换行"));
@@ -200,7 +211,7 @@ void rp_net_aid::rp_getLocalIpAddr(void)
     QList<QHostAddress> rp_localIpAddrlist = QNetworkInterface::allAddresses();
     foreach(QHostAddress localIpAddr, rp_localIpAddrlist)
     {
-        if(localIpAddr.protocol() == QAbstractSocket::IPv4Protocol && (localIpAddr.toString().left(3) != "169"))
+        if(localIpAddr.protocol() == QAbstractSocket::IPv4Protocol && (localIpAddr == QHostAddress::LocalHost || localIpAddr.toString().left(3) != "169"))
         {
             rp_localAddrComboBox->addItem(localIpAddr.toString());
         }
@@ -211,36 +222,25 @@ void rp_net_aid::rp_netAidFuncConfig()
 {
     rp_getLocalIpAddr();
 
-
-//    QString localHostname = QHostInfo::localHostName();
-//    QHostInfo rp_hostInfo = QHostInfo::fromName(localHostname);
-//    QList<QHostAddress> listAddress = rp_hostInfo.addresses();
-//    if(!listAddress.isEmpty())
-//    {
-//        qDebug() << localHostname;
-//        qDebug() << listAddress.first().toString();
-//    }
-
-//    QList<QNetworkInterface> rp_netInterfaceList = QNetworkInterface::allInterfaces();
-//    for(int i = 0; i < rp_netInterfaceList.count(); i++)
-//    {
-//        QNetworkInterface rp_netInterface = rp_netInterfaceList.at(i);
-
-//        QList<QNetworkAddressEntry> rp_addrEntryList = rp_netInterface.addressEntries();
-
-//        for(int j = 0; j < rp_addrEntryList.count(); j++)
-//        {
-//            QNetworkAddressEntry rp_addrEntry = rp_addrEntryList.at(j);
-//            qDebug() << j << ":" + rp_addrEntry.ip().toString() +"\n";
-//        }
-
-//    }
-
-
+    connect(rp_recvTypeButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(rp_netRecvTpyeCheck(int,bool)));
+    connect(rp_sendTypeButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(rp_netSendTpyeCheck(int,bool)));
 
     rp_netAidLanguageType = true;
 }
 
+void rp_net_aid::rp_netRecvTpyeCheck(int id, bool status)
+{
+    Q_UNUSED(id);
+    Q_UNUSED(status);
+    qDebug() << rp_recvTypeButtonGroup->checkedId();
+}
+
+void rp_net_aid::rp_netSendTpyeCheck(int id, bool status)
+{
+    Q_UNUSED(id);
+    Q_UNUSED(status);
+    qDebug() << rp_sendTypeButtonGroup->checkedId();
+}
 
 bool rp_net_aid::rp_netAidGetLanguageType()
 {

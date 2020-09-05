@@ -1,6 +1,7 @@
 #ifndef RP_NET_AID_H
 #define RP_NET_AID_H
 
+#include <QTcpSocket>
 #include <QWidget>
 #include <QLayout>
 #include <QLabel>
@@ -12,6 +13,13 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QButtonGroup>
+
+enum rp_datatype
+{
+    rp_asciiType,
+    rp_hexType,
+};
 
 class rp_net_aid : public QWidget
 {
@@ -40,6 +48,7 @@ private:
     QPushButton *rp_switchNetPushButton;
 
     QGroupBox *rp_netRecvSetGroupBox;
+    QButtonGroup *rp_recvTypeButtonGroup;
     QRadioButton *rp_recvTypeAsciiRadioButton;
     QRadioButton *rp_recvTypeHexRadioButton;
     QCheckBox *rp_recvLogModeCheckBox;
@@ -49,6 +58,7 @@ private:
     QPushButton *rp_recvClearPushButton;
 
     QGroupBox *rp_netSendSetGroupBox;
+    QButtonGroup *rp_sendTypeButtonGroup;
     QRadioButton *rp_sendTypeAsciiRadioButton;
     QRadioButton *rp_sendTypeHexRadioButton;
     QCheckBox *rp_sendPECCheckBox;
@@ -80,6 +90,11 @@ private:
     QPushButton *rp_resetCountPushButton;
 
     bool rp_netAidLanguageType;
+
+private slots:
+    void rp_netRecvTpyeCheck(int id, bool status);
+    void rp_netSendTpyeCheck(int id, bool status);
+
 
 };
 
