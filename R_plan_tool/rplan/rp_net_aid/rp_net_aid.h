@@ -23,6 +23,8 @@ private:
     void rp_netAidUI();
     void rp_netAidFuncConfig();
 
+    void rp_getLocalIpAddr(void);
+
 public:
     bool rp_netAidGetLanguageType();     // //TRUE = chinese, FALSE = english
     void rp_netAidLSetLanguageType(bool type);

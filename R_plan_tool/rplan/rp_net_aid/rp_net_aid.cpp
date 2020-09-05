@@ -1,5 +1,8 @@
 #include "rp_net_aid.h"
 
+#include <QHostInfo>
+#include <QNetworkInterface>
+
 rp_net_aid::rp_net_aid(QWidget *parent)
     : QWidget(parent)
 {
@@ -192,8 +195,49 @@ void rp_net_aid::rp_netAidUI()
 
 }
 
+void rp_net_aid::rp_getLocalIpAddr(void)
+{
+    QList<QHostAddress> rp_localIpAddrlist = QNetworkInterface::allAddresses();
+    foreach(QHostAddress localIpAddr, rp_localIpAddrlist)
+    {
+        if(localIpAddr.protocol() == QAbstractSocket::IPv4Protocol && (localIpAddr.toString().left(3) != "169"))
+        {
+            rp_localAddrComboBox->addItem(localIpAddr.toString());
+        }
+    }
+}
+
 void rp_net_aid::rp_netAidFuncConfig()
 {
+    rp_getLocalIpAddr();
+
+
+//    QString localHostname = QHostInfo::localHostName();
+//    QHostInfo rp_hostInfo = QHostInfo::fromName(localHostname);
+//    QList<QHostAddress> listAddress = rp_hostInfo.addresses();
+//    if(!listAddress.isEmpty())
+//    {
+//        qDebug() << localHostname;
+//        qDebug() << listAddress.first().toString();
+//    }
+
+//    QList<QNetworkInterface> rp_netInterfaceList = QNetworkInterface::allInterfaces();
+//    for(int i = 0; i < rp_netInterfaceList.count(); i++)
+//    {
+//        QNetworkInterface rp_netInterface = rp_netInterfaceList.at(i);
+
+//        QList<QNetworkAddressEntry> rp_addrEntryList = rp_netInterface.addressEntries();
+
+//        for(int j = 0; j < rp_addrEntryList.count(); j++)
+//        {
+//            QNetworkAddressEntry rp_addrEntry = rp_addrEntryList.at(j);
+//            qDebug() << j << ":" + rp_addrEntry.ip().toString() +"\n";
+//        }
+
+//    }
+
+
+
     rp_netAidLanguageType = true;
 }
 
@@ -205,9 +249,6 @@ bool rp_net_aid::rp_netAidGetLanguageType()
 
 void rp_net_aid::rp_netAidLSetLanguageType(bool type)
 {
-    QStringList rp_comAlgStrList;
-    QStringList rp_encAlgStrList;
-
     rp_netAidLanguageType = type;
 
     if(rp_netAidLanguageType)
