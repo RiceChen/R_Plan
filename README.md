@@ -1,6 +1,6 @@
 R_Plan
 
-[中文页](README.md) |
+[中文页](README_zh.md) |
 
 There is a wide range of embedded development tools for developers, and whenever we start developing, we need to open every tool one by one. For example, serial port, network debugging assistant, etc. Sometimes when multiple tools are opened, we still will waste time switching from different tools. 
 
