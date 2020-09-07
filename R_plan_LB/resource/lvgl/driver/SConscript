@@ -1,0 +1,23 @@
+from building import * 
+import rtconfig
+
+cwd = GetCurrentDir()
+
+src = []
+inc = []
+
+inc = inc + [cwd]
+
+src = src + Glob('./lv_port_disp.c')
+
+
+LOCAL_CCFLAGS = ''
+
+if rtconfig.CROSS_TOOL == 'gcc':
+    LOCAL_CCFLAGS += ' -std=c99'
+elif rtconfig.CROSS_TOOL == 'keil':
+    LOCAL_CCFLAGS += ' --c99 --gnu -g -W'
+
+group = DefineGroup('lvgl', src, depend = ['RP_USING_LVGL'], CPPPATH = inc, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
+
+Return('group')
