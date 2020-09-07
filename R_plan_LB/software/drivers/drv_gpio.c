@@ -174,6 +174,6 @@ int rt_hw_gpio_exit(void)
     rt_device_unregister(gpio_dev.parent);
 }
 
-INIT_DEVICE_EXPORT(rt_hw_gpio_init);
+//INIT_PREV_EXPORT(rt_hw_gpio_init);
 
 #endif

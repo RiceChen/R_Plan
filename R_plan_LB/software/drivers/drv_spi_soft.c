@@ -25,14 +25,11 @@
 #include "i2s_pub.h"
 #include "gpio_pub.h"
 #include "gpio.h"
-//定义模拟 SPI 的 GPIO 引脚
+
 #define SOFT_SPI_MISO   (4)
 #define SOFT_SPI_MOSI   (5)
 #define SOFT_SPI_CS     (3)
 #define SOFT_SPI_SCLK   (2)
-
-// 引用外部 i2s_ctrl 函数声明
-extern UINT32 i2s_ctrl(UINT32 cmd, void *param);
 
 struct soft_spi_dev
 {
@@ -41,151 +38,103 @@ struct soft_spi_dev
 
 static struct soft_spi_dev *spi_dev;
 
-/* 设置 SPI 端口初始化 */
 static void soft_spi_init()
 {
-    //设置为输出模式
-    gpio_config(SOFT_SPI_CS, GMODE_OUTPUT);
-    gpio_config(SOFT_SPI_SCLK, GMODE_OUTPUT);
-    gpio_config(SOFT_SPI_MOSI, GMODE_OUTPUT);
-    gpio_config(SOFT_SPI_MISO,GMODE_INPUT);
+    rt_pin_mode(SOFT_SPI_CS,   PIN_MODE_OUTPUT);
+    rt_pin_mode(SOFT_SPI_SCLK, PIN_MODE_OUTPUT);
+    rt_pin_mode(SOFT_SPI_MOSI, PIN_MODE_OUTPUT);
+    rt_pin_mode(SOFT_SPI_MISO, PIN_MODE_OUTPUT);
 
-    //设置 CPOL = 0
-    gpio_output(SOFT_SPI_SCLK,0);
-    gpio_output(SOFT_SPI_MOSI,0);
-    gpio_output(SOFT_SPI_CS,1);
+    rt_pin_write(SOFT_SPI_SCLK, PIN_LOW);
+    rt_pin_write(SOFT_SPI_MOSI, PIN_LOW);
+    rt_pin_write(SOFT_SPI_CS,   PIN_HIGH);
 }
 
-/*设置从设备使能 */
 static void soft_spi_cs_enable(int enable)
 {
-    UINT32 val;
-    volatile UINT32 *gpio_cfg_addr_cs;
-    gpio_cfg_addr_cs = (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + SOFT_SPI_CS * 4);
-    val = 0x00;   //设置为输出
-    REG_WRITE(gpio_cfg_addr_cs, val);
-    //设置为输出模式
+    rt_uint32_t val;
+    volatile rt_uint32_t *gpio_cfg_addr;
+    gpio_cfg_addr = (volatile rt_uint32_t *)(GPIO_BASE_ADDR + SOFT_SPI_CS * 4);
     
-    val = REG_READ(gpio_cfg_addr_cs);
+    val = REG_READ(gpio_cfg_addr);
 
-    if (enable)
-    {
-        //gpio_output(SOFT_SPI_CS,0);
-        val &= ~GCFG_OUTPUT_BIT;
-        val |= (0 & 0x01) << GCFG_OUTPUT_POS;
-        REG_WRITE(gpio_cfg_addr_cs, val);
-    }
-    else
-    {
-        //gpio_output(SOFT_SPI_CS,1);
-        val &= ~GCFG_OUTPUT_BIT;
-        val |= (1 & 0x01) << GCFG_OUTPUT_POS;
-        REG_WRITE(gpio_cfg_addr_cs, val);
-    }
+    val &= ~GCFG_OUTPUT_BIT;
+    val |= (enable & 0x01) << GCFG_OUTPUT_POS;
+    REG_WRITE(gpio_cfg_addr, val);
 }
 
-static uint8 soft_spi_ReadWriteByte(uint8 byte)
+static void soft_spi_ReadWriteByte(uint8 byte)
 {
-    uint8 rdata = 0;
-    uint8 i = 0;
-    UINT32 reg_val,reg_val2,reg_val3;
-    volatile UINT32 *gpio_cfg_addr_sck,*gpio_cfg_addr_mosi,*gpio_cfg_addr_miso;
-    gpio_cfg_addr_sck = (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + SOFT_SPI_SCLK * 4);
-    gpio_cfg_addr_mosi = (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + SOFT_SPI_MOSI * 4);
-    gpio_cfg_addr_miso =  (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + SOFT_SPI_MISO * 4);
-    reg_val = REG_READ(gpio_cfg_addr_sck);
-    reg_val2 = REG_READ(gpio_cfg_addr_mosi);
+    uint8 bit = 0;
+    rt_uint32_t sck_reg_val, mosi_reg_val;
+    volatile rt_uint32_t *gpio_cfg_addr_sck,*gpio_cfg_addr_mosi,*gpio_cfg_addr_miso;
+    gpio_cfg_addr_sck  = (volatile rt_uint32_t *)(GPIO_BASE_ADDR + SOFT_SPI_SCLK * 4);
+    gpio_cfg_addr_mosi = (volatile rt_uint32_t *)(GPIO_BASE_ADDR + SOFT_SPI_MOSI * 4);
+    sck_reg_val = REG_READ(gpio_cfg_addr_sck);
+    mosi_reg_val = REG_READ(gpio_cfg_addr_mosi);
     
-    
-    for(i=8;i>0;i--)
+    for(bit=8; bit>0; bit--)
     {   
-        // 拉低 SCK 进入发送数据状态
-        reg_val &= ~GCFG_OUTPUT_BIT;
-        reg_val |= (0) << GCFG_OUTPUT_POS;
-        REG_WRITE(gpio_cfg_addr_sck, reg_val);
+        sck_reg_val &= ~GCFG_OUTPUT_BIT;
+        sck_reg_val |= (0) << GCFG_OUTPUT_POS;
+        REG_WRITE(gpio_cfg_addr_sck, sck_reg_val);
         if(byte&0x80)
         {
-            //设置 MOSI 输出1
-            reg_val2 &= ~GCFG_OUTPUT_BIT;
-            reg_val2 |= (0x01) << GCFG_OUTPUT_POS;
-            REG_WRITE(gpio_cfg_addr_mosi, reg_val2);
+            mosi_reg_val &= ~GCFG_OUTPUT_BIT;
+            mosi_reg_val |= (0x01) << GCFG_OUTPUT_POS;
+            REG_WRITE(gpio_cfg_addr_mosi, mosi_reg_val);
         }
         else
         {
-             //设置 MOSI 输出0
-            reg_val2 &= ~GCFG_OUTPUT_BIT;
-            reg_val2 |= (0) << GCFG_OUTPUT_POS;
-            REG_WRITE(gpio_cfg_addr_mosi, reg_val2);
+            mosi_reg_val &= ~GCFG_OUTPUT_BIT;
+            mosi_reg_val |= (0) << GCFG_OUTPUT_POS;
+            REG_WRITE(gpio_cfg_addr_mosi, mosi_reg_val);
         }
         byte<<=1;
-        rdata = rdata<<1;
-       
-        if(REG_READ(gpio_cfg_addr_miso) & GCFG_INPUT_BIT )  //读取数据
-        {
-            rdata |= 0x01;
-        }
-        // 发送完数据 拉高 SCK 
-        reg_val &= ~GCFG_OUTPUT_BIT;
-        reg_val |= (0x01) << GCFG_OUTPUT_POS;
-        REG_WRITE(gpio_cfg_addr_sck, reg_val);
+
+        sck_reg_val &= ~GCFG_OUTPUT_BIT;
+        sck_reg_val |= (0x01) << GCFG_OUTPUT_POS;
+        REG_WRITE(gpio_cfg_addr_sck, sck_reg_val);
     }
-    //空闲状态拉低 SCK
-    reg_val &= ~GCFG_OUTPUT_BIT;
-    reg_val |= (0) << GCFG_OUTPUT_POS;
-    REG_WRITE(gpio_cfg_addr_sck, reg_val);
-    return rdata;
+    sck_reg_val &= ~GCFG_OUTPUT_BIT;
+    sck_reg_val |= (0) << GCFG_OUTPUT_POS;
+    REG_WRITE(gpio_cfg_addr_sck, sck_reg_val);
 }
 
-
-/* 模拟SPI 配置 */
 rt_err_t _soft_spi_configure(struct rt_spi_device *dev,struct rt_spi_configuration *cfg)
 {
     return RT_EOK;
 }
-/*  */
+
 rt_uint32_t _soft_spi_xfer(struct rt_spi_device* device, struct rt_spi_message* message)
 {
 
     struct rt_spi_configuration *config = &device->config;
     rt_uint32_t size = message->length;
 
-        /* 设置 CS  */
-        if (message->cs_take)
+    if (message->cs_take)
+    {
+        soft_spi_cs_enable(0);
+    }
+
+    const rt_uint8_t *send_ptr = message->send_buf;
+    rt_uint8_t *recv_ptr = message->recv_buf;
+    while (size--)
+    {
+        rt_uint8_t data = 0xFF;
+
+        if (send_ptr != RT_NULL)
         {
-            soft_spi_cs_enable(1);
+            data = *send_ptr++;
+            soft_spi_ReadWriteByte(data);
         }
+    }
+    
+    if (message->cs_release)
+    {
+        soft_spi_cs_enable(1);
+    }
 
-        const rt_uint8_t *send_ptr = message->send_buf;
-        rt_uint8_t *recv_ptr = message->recv_buf;
-        while (size--)
-        {
-            rt_uint8_t data = 0xFF;
-
-            if (send_ptr != RT_NULL)
-            {
-                data = *send_ptr++;
-                //rt_kprintf("send_ptr:%02x\n",data);
-                // 发送数据
-                soft_spi_ReadWriteByte(data);
-            }
-
-            //Wait until the transmit buffer is empty
-
-            if (recv_ptr != RT_NULL)
-            {
-                // 接收数据
-                data = soft_spi_ReadWriteByte(data);
-                *recv_ptr++ = data;
-                //rt_kprintf("recv_ptr:%02x\n",data);
-            }
-        }
-        /* 设置 release CS   */
-        if (message->cs_release)
-        {
-            soft_spi_cs_enable(0);
-        }
-
-    //rt_kprintf("len=%d \n",message->length);
     return message->length;
 }
 
@@ -228,8 +177,6 @@ int rt_soft_spi_bus_register(char *name)
     
     return result;
 
-
-
 _exit:
     if (spi_dev)
     {
@@ -252,6 +199,8 @@ int rt_soft_spi_device_init(void)
 
     rt_kprintf("[soft spi]:rt_soft_spi_device_init \n");
 
+    soft_spi_init();
+
     if(soft_spi_device)
     {
         return RT_EOK;
@@ -264,7 +213,6 @@ int rt_soft_spi_device_init(void)
     }
     memset(soft_spi_device,0,sizeof(struct rt_spi_device));
 
-    /* 注册 SPI BUS */
     result = rt_soft_spi_bus_register("soft_spi");
     if(result != RT_EOK)
     {
@@ -272,7 +220,6 @@ int rt_soft_spi_device_init(void)
         goto _exit;
     }
 
-    /* 绑定 CS */
     result = rt_spi_bus_attach_device(soft_spi_device,"spi3","soft_spi",NULL);
     if(result != RT_EOK)
     {
@@ -290,6 +237,4 @@ _exit:
     }
     return result;
 }
-INIT_PREV_EXPORT(rt_soft_spi_device_init);
-INIT_DEVICE_EXPORT(soft_spi_init);
-MSH_CMD_EXPORT(soft_spi_init,soft_spi_init);
+INIT_BOARD_EXPORT(rt_soft_spi_device_init);

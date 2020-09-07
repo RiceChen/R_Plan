@@ -223,9 +223,4 @@ static int rt_lcd_init(void)
     return RT_EOK;
 }
 
-static int rt_hw_lcd_init(void)
-{
-	rt_lcd_init();
-	return 0;
-}
-INIT_COMPONENT_EXPORT(rt_hw_lcd_init);
+INIT_DEVICE_EXPORT(rt_lcd_init);

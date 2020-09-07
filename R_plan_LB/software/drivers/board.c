@@ -30,6 +30,7 @@
 #include "interrupt.h"
 #include "driver_pub.h"
 #include "drv_uart.h"
+#include "drv_gpio.h"
 #include "include.h"
 #include "func_pub.h"
 #include <string.h>
@@ -86,7 +87,9 @@ void rt_hw_board_init(void)
     driver_init();
     /* interrupt init */
     rt_hw_interrupt_init();
-    /* init hardware interrupt */
+    /* init gpio */
+    rt_hw_gpio_init();
+    /* init uart */
     rt_hw_uart_init();
     /* init system tick */
     os_clk_init();
