@@ -1,0 +1,9 @@
+from building import *
+
+cwd     = GetCurrentDir()
+src     = Glob('*.c')
+path    = [cwd]
+
+group = DefineGroup('ugui', src, depend = ['RP_USING_UGUI'], CPPPATH = path)
+
+Return('group')
