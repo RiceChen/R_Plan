@@ -9,6 +9,8 @@ rp_cmd_console::rp_cmd_console(QWidget *parent)
     rp_cmdWindowUI();
 
     rp_cmdFuncConfig();
+
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 rp_cmd_console::~rp_cmd_console()

@@ -20,6 +20,7 @@ SOURCES += \
     main.cpp \
     rp_cmd/rp_cmd_console.cpp \
     rp_find_file/rp_find_file.cpp \
+    rp_mini_udp_ota/rp_mini_udp_ota.cpp \
     rp_net_aid/rp_net_aid.cpp \
     rp_rtt_ota_pack/rp_rtt_ota_pack.cpp \
     rplan.cpp
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     rp_cmd/rp_cmd_console.h \
     rp_find_file/rp_find_file.h \
+    rp_mini_udp_ota/rp_mini_udp_ota.h \
     rp_net_aid/rp_net_aid.h \
     rp_rtt_ota_pack/rp_rtt_ota_pack.h \
     rplan.h

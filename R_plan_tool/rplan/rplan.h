@@ -6,6 +6,7 @@
 #include "rp_rtt_ota_pack/rp_rtt_ota_pack.h"
 #include "rp_find_file/rp_find_file.h"
 #include "rp_net_aid/rp_net_aid.h"
+#include "rp_mini_udp_ota/rp_mini_udp_ota.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -17,6 +18,7 @@ QT_END_NAMESPACE
 enum rp_funTabWidgetIndex
 {
     rp_netAidTab,
+    rp_udpOtaTab,
     rp_rttOtaPackTab,
     rp_findFileTab,
     rp_cmdTab,
@@ -49,5 +51,6 @@ private:
     rp_rtt_ota_pack *rp_rttOtaPackWidget;
     rp_find_file *rp_findFileWidget;
     rp_net_aid *rp_netAidWidget;
+    rp_mini_udp_ota *rp_udpOtaWidget;
 };
 #endif // RPLAN_H

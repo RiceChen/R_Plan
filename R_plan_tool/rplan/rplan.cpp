@@ -86,11 +86,15 @@ void rplan::rp_mainWindowUI()
                                    QTabBar::tab:hover{background:rgb(255, 255, 255, 100);color:black;}\
                                    QTabBar::tab:selected{border:1px solid rgb(100, 100, 100); background-color:rgb(50, 50, 50);color:rgb(255, 255, 255)}");
 
-
    // NetAid
    rp_netAidWidget = new rp_net_aid();
    const QIcon rp_netAidIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/net_aid.png"));
    rp_funTabWidget->addTab(rp_netAidWidget, rp_netAidIconTab, tr("NetAid"));
+
+   // udp ota
+   rp_udpOtaWidget = new rp_mini_udp_ota();
+   const QIcon rp_udpOtaIconTab = QIcon::fromTheme("tab-rtt_ota_pack", QIcon(":/image/ota.png"));
+   rp_funTabWidget->addTab(rp_udpOtaWidget, rp_udpOtaIconTab, tr("udp ota"));
 
     // rtt ota pack
     rp_rttOtaPackWidget = new rp_rtt_ota_pack();
@@ -144,6 +148,12 @@ void rplan::rp_switchFuncTabWidget()
             rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/en.png"));
             rp_ceShiftAction->setIcon(rp_ceShiftIcon);
         }
+        break;
+    }
+    case rp_udpOtaTab:
+    {
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
         break;
     }
     case rp_rttOtaPackTab:
@@ -202,6 +212,12 @@ void rplan::rp_ceShift()
             rp_ceShiftAction->setIcon(rp_ceShiftIcon);
             rp_netAidWidget->rp_netAidLSetLanguageType(TRUE);
         }
+        break;
+    }
+    case rp_udpOtaTab:
+    {
+        rp_ceShiftIcon = QIcon::fromTheme("edit-CH-EN-shift", QIcon(":/image/ch.png"));
+        rp_ceShiftAction->setIcon(rp_ceShiftIcon);
         break;
     }
     case rp_rttOtaPackTab:
