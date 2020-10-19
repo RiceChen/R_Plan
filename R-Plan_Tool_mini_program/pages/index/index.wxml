@@ -1,0 +1,64 @@
+<!--index.wxml-->
+<view class="rice_logo">
+    <image src="../../image/rice_logo.png" style="width: 227px; height: 100px;"></image>
+</view>
+
+<view class="devices_summary">
+  <view>
+    <text>已发现 {{devices.length}} 个BLE设备：</text>
+    <view class="devices_scan_btn">
+      <button size="mini" style="width:22vw; font-size: 4vw" bindtap="openBluetoothAdapter">开始扫描</button>
+      <button size="mini" style="width:22vw; font-size: 4vw" bindtap="closeBluetoothAdapter">停止扫描</button>
+    </view>
+  </view>
+</view>
+
+<scroll-view class="device_list" scroll-y scroll-with-animation>
+  <view wx:for="{{devices}}" wx:key="index"
+   data-device-id="{{item.deviceId}}"
+   data-name="{{item.name || item.localName}}"
+   bindtap="bindcreateBLEConnection" 
+   class="device_item"
+   hover-class="device_item_hover">
+    <view style="font-size: 16px; color: #333;">{{item.name}}</view>
+    <view style="font-size: 10px">信号强度: {{item.RSSI}}dBm ({{utils.max(0, item.RSSI + 100)}}%)</view>
+    <view style="font-size: 10px">UUID: {{item.deviceId}}</view>
+    <view style="font-size: 10px">Service数量: {{utils.len(item.advertisServiceUUIDs)}}</view>
+  </view>
+</scroll-view>
+
+<view class="connected_info" wx:if="{{connected}}">
+<!-- <view class="connected_info"> -->
+  <text>已连接到{{name}}</text>
+  <view class="data_title">接受数据：</view>
+  <view class="read_data">
+    <textarea style="height: 3em" placeholder="接收到的数据"/>
+  </view>
+  <view class="data_title">发送数据：</view>
+  <view class="write_data">
+    <textarea bindblur="bindWriteData" style="height: 4em" placeholder="输入要发送的数据" />
+  </view>
+  <view class="operation">
+    <view class="data-type" wx:if="{{canWrite}}">
+    <!-- <view class="data-type"> -->
+      <radio-group bindchange="dataTypeSelect">
+        <label class="radio">
+          <radio value="hex" checked="false"/>HEX
+        </label>
+        <label class="radio">
+          <radio value="ascii" checked="true" />ASCII
+        </label>
+      </radio-group>
+    </view>
+    <view class="devices_func_btn">
+      <button wx:if="{{canWrite}}" size="mini" style="width:22vw; font-size: 4vw" bindtap="writeBLECharacteristicValue">写数据</button>
+      <button size="mini" style="width:22vw; font-size: 4vw" bindtap="closeBLEConnection">断开连接</button>
+    </view>
+  </view>
+</view>
+
+<view class="log_title">log：</view>
+<scroll-view class="log_list" scroll-y scroll-with-animation>
+  <text style="font-size: 10px">{{log_list}}</text>
+</scroll-view>
+<button class="clear_log" bindtap="bindClearLog">清空调试信息</button>

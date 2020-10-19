@@ -1,0 +1,108 @@
+/**index.wxss**/
+.rice_logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.devices_summary {
+  padding: 5px;
+  padding-bottom: 15px;
+  font-size: 15px;
+}
+
+.devices_scan_btn {
+  position: absolute;
+  display: inline-block;
+  right: 10px;
+}
+
+.device_list {
+  height: 100px;
+  margin: 5px 5px;
+  margin-top: 0;
+  border: 1px solid #EEE;
+  border-radius: 5px;
+  width: auto;
+}
+
+.device_item {
+  border-bottom: 1px solid #EEE;
+  padding: 10px;
+  color: #666;
+}
+.device_item_hover {
+  background-color: rgba(0, 0, 0, .1);
+}
+
+.connected_info {
+  margin: 5px 5px;
+  /* margin-top: 0;
+  border: 1px solid #EEE;
+  border-radius: 5px; */
+  width: auto;
+}
+
+.data_title{
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 10rpx;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+}
+
+.read_data {
+  padding: 5px 25rpx;
+  background-color: #5ff;
+}
+
+.write_data {
+  padding: 5px 25rpx;
+  background-color: #5ff;
+}
+
+.connected_info .operation {
+  /* position: absolute; */
+  /* display: inline-block;
+  right: 10px; */
+  padding: 2px;
+  padding-bottom: 15px;
+  font-size: 15px;
+}
+
+.data-type {
+  position: absolute;
+  display: inline-block;
+  margin-top: 5px;
+  left: 10px;
+}
+
+.devices_func_btn {
+  position: absolute;
+  display: inline-block;
+  margin-top: 5px;
+  right: 10px;
+}
+
+.log_title{
+  margin: 5px 5px;
+  margin-top: 20px;
+  width: auto;
+}
+
+.log_list {
+  height: 200px;
+  margin: 5px 5px;
+  margin-top: 1;
+  border: 1px solid #EEE;
+  border-radius: 5px;
+  width: auto;
+}
+
+.clear_log {
+  width: 90%;
+  margin: 5px 5px;
+  border: 1px solid #EEE;
+  border-radius: 5px;
+  font-size: 3vw;
+}
